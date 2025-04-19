@@ -11,6 +11,8 @@ import sys
 import re
 import zipfile
 import subprocess
+import tempfile
+temp_dir = tempfile.gettempdir()
 
 # --- FUNÇÕES AUXILIARES (Mantidas exatamente como no original) ---
 
@@ -117,6 +119,8 @@ def converter_para_pdf(odt_bytes, nome_arquivo_base):
         r"C:\Program Files (x86)\LibreOffice\program\soffice.exe",
         "/usr/bin/libreoffice",
         "/Applications/LibreOffice.app/Contents/MacOS/soffice"
+        "/usr/bin/libreoffice",
+        "/usr/bin/soffice"
     ]
 
     for path in paths_to_try:
@@ -149,7 +153,7 @@ def converter_para_pdf(odt_bytes, nome_arquivo_base):
 
         # Usar Popen para melhor controle, especialmente no Windows
         process = subprocess.Popen(comando, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=(os.name == 'nt'))
-        stdout, stderr = process.communicate(timeout=60) # Timeout aumentado
+        stdout, stderr = process.communicate(timeout=120) # Timeout aumentado
 
         if process.returncode != 0:
             error_message = stderr.decode('utf-8', errors='ignore')
